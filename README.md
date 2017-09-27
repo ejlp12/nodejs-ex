@@ -173,7 +173,10 @@ Now navigate to the newly created Node.js web app at the hostname we just config
 You may have noticed the index page "Page view count" reads "No database configured". Let's fix that by adding a MongoDB service. We could use the second OpenShift template example (`nodejs-mongodb.json`) but for the sake of demonstration let's point `oc new-app` at a DockerHub image:
 
         $ oc new-app centos/mongodb-26-centos7 \
-        $ -e MONGODB_USER=admin,MONGODB_DATABASE=mongo_db,MONGODB_PASSWORD=secret,MONGODB_ADMIN_PASSWORD=super-secret
+        $ -e MONGODB_USER=admin \
+	$ -e MONGODB_DATABASE=mongo_db \
+	$ -e MONGODB_PASSWORD=secret \
+	$ -e MONGODB_ADMIN_PASSWORD=super-secret
 
 The `-e` flag sets the environment variables we want used in the configuration of our new app.
 
@@ -213,6 +216,13 @@ Then check `oc status` to see that an updated deployment has been kicked off:
 	    bc/nodejs-ex builds https://github.com/openshift/nodejs-ex with openshift/nodejs:0.10
 	    deployment #2 deployed about a minute ago - 1 pod
 	    deployment #1 deployed 2 hours ago
+
+Check the log of nodejs-ex running pod e.g. `oc logs nodejs-ex-3-vj5z2 | grep Mongo`, make sure connection to MongoDB is successful.
+
+```
+Error connecting to Mongo. Message:
+MongoError: failed to connect to server [172.30.252.94:27017] on first connect [MongoError: connection 0 to 172.30.252.94:27017 timed out]
+````
 
 #### Success
 
